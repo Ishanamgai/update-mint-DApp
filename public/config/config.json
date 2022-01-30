@@ -1,0 +1,18 @@
+{
+  "CONTRACT_ADDRESS": "0xB5572ef45a121CB72322be82a416Aa548A41B76c",
+  "SCAN_LINK": "https://etherscan.io/address/0xB5572ef45a121CB72322be82a416Aa548A41B76c",
+  "NETWORK": {
+    "NAME": "Etherium ",
+    "SYMBOL": "ETH",
+    "ID": 1
+  },
+  "NFT_NAME": "Chibi Dino Trick or Treat",
+  "SYMBOL": "Set",
+  "MAX_SUPPLY": 400,
+  "WEI_COST": 0,
+  "DISPLAY_COST": 0,
+  "GAS_LIMIT": 380000,
+  "MARKETPLACE": "Opeansea",
+  "MARKETPLACE_LINK": "https://testnets.opensea.io/collection/Chibi-Dino-Trick-or-Treat",
+  "SHOW_BACKGROUND": true
+}
