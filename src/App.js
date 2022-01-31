@@ -4,6 +4,7 @@ import { connect } from "./redux/blockchain/blockchainActions";
 import { fetchData } from "./redux/data/dataActions";
 import * as s from "./styles/globalStyles";
 import styled from "styled-components";
+import targetTime from "./config";
 import logo from "./assets/logo.png";
 import one from "./assets/one.png";
 import five from "./assets/five.png";
@@ -18,6 +19,15 @@ function App() {
   const blockchain = useSelector((state) => state.blockchain);
   const data = useSelector((state) => state.data);
   const [claimingNft, setClaimingNft] = useState(false);
+  const [countdown, setCountdown] = useState(0);
+  const [leftTime, setLeftTime] = useState({
+    year: 0,
+    month: 0,
+    day: 0,
+    hour: 0,
+    minute: 0,
+    second: 0,
+  });
   const [feedback, setFeedback] = useState(
     `Maximum 5 Mints, to mint your NFT.`
   );
@@ -108,6 +118,38 @@ function App() {
 
   useEffect(() => {
     getConfig();
+    let currentDate = new Date();
+    let diff_Time = parseInt((targetTime - currentDate) / 1000);
+    console.log("time diff", diff_Time, currentDate, targetTime);
+    if (diff_Time > 0) {
+      setCountdown(diff_Time);
+    }
+    const minute = 1000 * 60;
+    const hour = minute * 60;
+    const day = hour * 24;
+    setInterval(() => {
+      if (diff_Time > 0) {
+        let data = {
+          second: diff_Time % 60,
+          minute: parseInt(diff_Time / 60) % 60,
+          hour: parseInt(diff_Time / 3600) % 24,
+          day: parseInt(diff_Time / 86400),
+        };
+        diff_Time--;
+        setLeftTime(data);
+        setCountdown(diff_Time);
+      }
+      else {
+        let data = {
+          second: 0,
+          minute: 0,
+          hour: 0,
+          day: 0,
+        };
+        setLeftTime(data);
+        setCountdown(0);
+      }
+    }, 1000);
   }, []);
 
   useEffect(() => {
@@ -145,13 +187,15 @@ function App() {
   return (
     <s.Screen>
       <s.Header>
-        <s.Logo src={logo}></s.Logo>
+        <s.LogoContain>
+          <s.Logo src={logo}></s.Logo>
+        </s.LogoContain>
         <s.Menu>
-          <s.MenuItem>HOME</s.MenuItem>
-          <s.MenuItem>DISCORD</s.MenuItem>
-          <s.MenuItem>TWITTER</s.MenuItem>
-          <s.MenuItem>INSTAGRAM</s.MenuItem>
-          <s.MenuItem>FAQ</s.MenuItem>
+          <s.MenuItem href="#">HOME</s.MenuItem>
+          <s.MenuItem href="#">DISCORD</s.MenuItem>
+          <s.MenuItem href="#">TWITTER</s.MenuItem>
+          <s.MenuItem href="#">INSTAGRAM</s.MenuItem>
+          <s.MenuItem href="#">FAQ</s.MenuItem>
           {blockchain.account === "" || blockchain.smartContract === null ? (
             <s.MenuActiveItem
               onClick={(e) => {
@@ -163,20 +207,43 @@ function App() {
               CONNECT
             </s.MenuActiveItem>
           ) : (
-            <s.MenuActiveItem
-              disabled={claimingNft ? 1 : 0}
-              onClick={(e) => {
-                e.preventDefault();
-                claimNFTs();
-                getData();
-              }}
-            >
-              MINT NOW
-            </s.MenuActiveItem>
+            <></>
           )}
         </s.Menu>
       </s.Header>
-      <s.TimerText>120</s.TimerText>
+      <s.Timerblock>
+        <s.TimerText>
+          <s.ItemContain>
+            <s.TimerValue>
+              {parseInt(leftTime.day / 10)}
+              {leftTime.day % 10}
+            </s.TimerValue>
+            <s.Timertitle>DAYS</s.Timertitle>
+          </s.ItemContain>
+          <s.ItemContain>
+            <s.TimerValue>
+              {parseInt(leftTime.hour / 10)}
+              {leftTime.hour % 10}
+            </s.TimerValue>
+            <s.Timertitle>HRS</s.Timertitle>
+          </s.ItemContain>
+          <s.ItemContain>
+            <s.TimerValue>
+              {parseInt(leftTime.minute / 10)}
+              {leftTime.minute % 10}
+            </s.TimerValue>
+            <s.Timertitle>MIN</s.Timertitle>
+          </s.ItemContain>
+          <s.ItemContain>
+            <s.TimerValue>
+              {parseInt(leftTime.second / 10)}
+              {leftTime.second % 10}
+            </s.TimerValue>
+            <s.Timertitle>SEC</s.Timertitle>
+          </s.ItemContain>
+        </s.TimerText>
+      </s.Timerblock>
+
       <s.CommentText>
         On August 20th at 6PM PST, you will be able to mint your own Chibi Dinos
       </s.CommentText>
@@ -184,23 +251,53 @@ function App() {
         <s.Card>
           <s.CardImg src={one}></s.CardImg>
           <s.CardText>Mint 1 Chibi Dinos</s.CardText>
-          <s.CardButton onClick={() => setMintAmount(1)}>
-            MINT SOON
-          </s.CardButton>
+          {countdown === 0 ? (
+            <s.CardButton
+              onClick={(e) => {
+                setMintAmount(10);
+                claimNFTs();
+                getData();
+              }}
+            >
+              MINT NOW
+            </s.CardButton>
+          ) : (
+            <s.CardButton>MINT SOON</s.CardButton>
+          )}
         </s.Card>
         <s.Card>
           <s.CardImg src={five}></s.CardImg>
           <s.CardText>Mint 5 Chibi Dinos</s.CardText>
-          <s.CardButton onClick={() => setMintAmount(5)}>
-            MINT SOON
-          </s.CardButton>
+          {countdown === 0 ? (
+            <s.CardButton
+              onClick={(e) => {
+                setMintAmount(10);
+                claimNFTs();
+                getData();
+              }}
+            >
+              MINT NOW
+            </s.CardButton>
+          ) : (
+            <s.CardButton>MINT SOON</s.CardButton>
+          )}
         </s.Card>
         <s.Card>
           <s.CardImg src={ten}></s.CardImg>
           <s.CardText>Mint 10 Chibi Dinos</s.CardText>
-          <s.CardButton onClick={() => setMintAmount(10)}>
-            MINT SOON
-          </s.CardButton>
+          {countdown === 0 ? (
+            <s.CardButton
+              onClick={(e) => {
+                setMintAmount(10);
+                claimNFTs();
+                getData();
+              }}
+            >
+              MINT NOW
+            </s.CardButton>
+          ) : (
+            <s.CardButton>MINT SOON</s.CardButton>
+          )}
         </s.Card>
       </s.MintBlock>
     </s.Screen>

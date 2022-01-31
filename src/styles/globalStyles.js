@@ -13,6 +13,14 @@ export const Header = styled.div`
   display: flex;
   justify-content: space-around;
   padding: 20px;
+  @media (max-width: 767px) {
+    flex-direction: column;
+    align-items: center
+  }
+`;
+export const LogoContain = styled.div`
+  displau: flex;
+  align-items: center;
 `;
 export const Logo = styled.img`
   width: 50px;
@@ -20,9 +28,14 @@ export const Logo = styled.img`
 export const Menu = styled.div`
   display: flex;
   align-items: center;
+  @media (max-width: 767px) {
+    flex-direction: column;
+  }
 `;
 export const MenuItem = styled.a`
   padding: 20px 20px;
+  text-decoration: none;
+  color: black;
 `;
 export const MenuActiveItem = styled.button`
   padding: 20px 20px;
@@ -31,28 +44,51 @@ export const MenuActiveItem = styled.button`
   border: none;
   cursor: pointer;
 `;
-export const TimerText = styled.p`
-  text-align: center;
-  font-size: 70px;
-  font-weight: bold;
-  margin-top: 260px;
+export const Timerblock = styled.div`
+  display: flex;
+  justify-content: center;
 `;
+export const TimerText = styled.div`
+  margin-top: 260px;
+  width: 400px;
+  display: flex;
+  background: green;
+  justify-content: center;
+  @media (max-width: 767px) {
+    margin-top: 20px;
+  }
+`;
+export const ItemContain = styled.div`
+  margin: 10px 20px;
+`;
+export const TimerValue = styled.p`
+  font-size: 50px;
+  color: black;
+  font-weight: bold;
+`;
+export const Timertitle = styled.p`
+  color: white;
+  text-align: center;
+`
 export const CommentText = styled.p`
   text-align: center;
   font-size: 15px;
   font-weight: bold;
-  margin-top: 0px;
+  margin-top: 10px;
   margin-left: 300px;
+  @media (max-width: 767px) {
+    margin-left: 0;
+  }
 `;
 export const MintBlock = styled.div`
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
   flex-wrap: wrap;
   margin-top: 60px;
 `;
 export const Card = styled.div`
   display: flex;
-  margin-top: 20px;
+  margin: 20px;
   border-radius: 20px;
   flex-direction: column;
   background: white;
@@ -61,7 +97,7 @@ export const Card = styled.div`
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 `;
 export const CardImg = styled.img`
-  width: 350px;
+  width: 330px;
 `;
 export const CardText = styled.p`
   font-size: 20px;
@@ -69,73 +105,11 @@ export const CardText = styled.p`
 `;
 export const CardButton = styled.button`
   border-radius: 30px;
-  padding: 10px 120px;
+  padding: 10px 110px;
   margin-top: 30px;
   background: red;
   border: none;
   color: white;
   cursor: pointer;
   font-weight: bold;
-`;
-// Used for providing space between components
-export const SpacerXSmall = styled.div`
-  height: 8px;
-  width: 8px;
-`;
-
-// Used for providing space between components
-export const SpacerSmall = styled.div`
-  height: 16px;
-  width: 16px;
-`;
-
-// Used for providing space between components
-export const SpacerMedium = styled.div`
-  height: 24px;
-  width: 24px;
-`;
-
-// Used for providing space between components
-export const SpacerLarge = styled.div`
-  height: 32px;
-  width: 32px;
-`;
-
-// Used for providing a wrapper around a component
-export const Container = styled.div`
-  display: flex;
-  flex: ${({ flex }) => (flex ? flex : 0)};
-  flex-direction: ${({ fd }) => (fd ? fd : "column")};
-  justify-content: ${({ jc }) => (jc ? jc : "flex-start")};
-  align-items: ${({ ai }) => (ai ? ai : "flex-start")};
-  background-color: ${({ test }) => (test ? "pink" : "none")};
-  width: 100%;
-  background-image: ${({ image }) => (image ? `url(${image})` : "none")};
-  background-size: cover;
-  background-position: center;
-`;
-
-export const TextTitle = styled.p`
-  color: var(--primary-text);
-  font-size: 22px;
-  font-weight: 500;
-  line-height: 1.6;
-`;
-
-export const TextSubTitle = styled.p`
-  color: var(--primary-text);
-  font-size: 18px;
-  line-height: 1.6;
-`;
-
-export const TextDescription = styled.p`
-  color: var(--primary-text);
-  font-size: 16px;
-  line-height: 1.6;
-`;
-
-export const StyledClickable = styled.div`
-  :active {
-    opacity: 0.6;
-  }
 `;
