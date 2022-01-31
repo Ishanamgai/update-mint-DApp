@@ -5,10 +5,12 @@ import { fetchData } from "./redux/data/dataActions";
 import * as s from "./styles/globalStyles";
 import styled from "styled-components";
 import targetTime from "./config";
-import logo from "./assets/logo.png";
+import logo from "./assets/logo_.png";
 import one from "./assets/one.png";
 import five from "./assets/five.png";
 import ten from "./assets/ten.png";
+import bg from "./assets/bg.png";
+
 require("dotenv").config();
 
 const truncate = (input, len) =>
@@ -48,39 +50,41 @@ function App() {
     GAS_LIMIT: 0,
     MARKETPLACE: "",
     MARKETPLACE_LINK: "",
-    SHOW_BACKGROUND: false,
+    SHOW_BACKGROUND: true,
   });
 
   const claimNFTs = () => {
-    let cost = CONFIG.WEI_COST;
-    let gasLimit = CONFIG.GAS_LIMIT;
-    let totalCostWei = String(cost * mintAmount);
-    let totalGasLimit = String(gasLimit * mintAmount);
-    console.log("Cost: ", totalCostWei);
-    console.log("Gas limit: ", totalGasLimit);
-    setFeedback(`MAXIMUM 5 Mints for your ${CONFIG.NFT_NAME}...`);
-    setClaimingNft(true);
-    blockchain.smartContract.methods
-      .mint(mintAmount)
-      .send({
-        gasLimit: String(totalGasLimit),
-        to: CONFIG.CONTRACT_ADDRESS,
-        from: blockchain.account,
-        value: totalCostWei,
-      })
-      .once("error", (err) => {
-        console.log(err);
-        setFeedback("Sorry, something went wrong please try again later.");
-        setClaimingNft(false);
-      })
-      .then((receipt) => {
-        console.log(receipt);
-        setFeedback(
-          `WOW, the ${CONFIG.NFT_NAME} is yours! go visit Opensea.io to view it.`
-        );
-        setClaimingNft(false);
-        dispatch(fetchData(blockchain.account));
-      });
+    if (blockchain.account !== "" && blockchain.smartContract !== null) {
+      let cost = CONFIG.WEI_COST;
+      let gasLimit = CONFIG.GAS_LIMIT;
+      let totalCostWei = String(cost * mintAmount);
+      let totalGasLimit = String(gasLimit * mintAmount);
+      console.log("Cost: ", totalCostWei);
+      console.log("Gas limit: ", totalGasLimit);
+      setFeedback(`MAXIMUM 5 Mints for your ${CONFIG.NFT_NAME}...`);
+      setClaimingNft(true);
+      blockchain.smartContract.methods
+        .mint(mintAmount)
+        .send({
+          gasLimit: String(totalGasLimit),
+          to: CONFIG.CONTRACT_ADDRESS,
+          from: blockchain.account,
+          value: totalCostWei,
+        })
+        .once("error", (err) => {
+          console.log(err);
+          setFeedback("Sorry, something went wrong please try again later.");
+          setClaimingNft(false);
+        })
+        .then((receipt) => {
+          console.log(receipt);
+          setFeedback(
+            `WOW, the ${CONFIG.NFT_NAME} is yours! go visit Opensea.io to view it.`
+          );
+          setClaimingNft(false);
+          dispatch(fetchData(blockchain.account));
+        });
+    }
   };
 
   const decrementMintAmount = () => {
@@ -138,8 +142,7 @@ function App() {
         diff_Time--;
         setLeftTime(data);
         setCountdown(diff_Time);
-      }
-      else {
+      } else {
         let data = {
           second: 0,
           minute: 0,
@@ -147,7 +150,6 @@ function App() {
           day: 0,
         };
         setLeftTime(data);
-        setCountdown(0);
       }
     }, 1000);
   }, []);
@@ -158,7 +160,7 @@ function App() {
 
   /*configure this for use*/
   const allowedAdd = [
-    "0x7a8633a6d00BC857E684fD6f15687f9a0fc24585",
+    "",
     "0x922985EB13048639866022e14d01E31B5a792b4A",
     "0x93b8893e482faF7472e25b5994Acb6CA3631caE6",
     "0x3aa109761f5047c83c76ac4e61a07fa8ca9db959",
@@ -185,7 +187,7 @@ function App() {
   );
 
   return (
-    <s.Screen>
+    <s.Screen image={bg}>
       <s.Header>
         <s.LogoContain>
           <s.Logo src={logo}></s.Logo>
@@ -195,7 +197,7 @@ function App() {
           <s.MenuItem href="#">DISCORD</s.MenuItem>
           <s.MenuItem href="#">TWITTER</s.MenuItem>
           <s.MenuItem href="#">INSTAGRAM</s.MenuItem>
-          <s.MenuItem href="#">FAQ</s.MenuItem>
+
           {blockchain.account === "" || blockchain.smartContract === null ? (
             <s.MenuActiveItem
               onClick={(e) => {
@@ -207,6 +209,16 @@ function App() {
               CONNECT
             </s.MenuActiveItem>
           ) : (
+            // <s.MenuActiveItem
+            //   disabled={claimingNft ? 1 : 0}
+            //   onClick={(e) => {
+            //     e.preventDefault();
+            //     claimNFTs();
+            //     getData();
+            //   }}
+            // >
+            //   MINT NOW
+            // </s.MenuActiveItem>
             <></>
           )}
         </s.Menu>
@@ -245,21 +257,22 @@ function App() {
       </s.Timerblock>
 
       <s.CommentText>
-        On August 20th at 6PM PST, you will be able to mint your own Chibi Dinos
+        On February 3rd at 6PM PST, you will be able to mint your own Bear
       </s.CommentText>
       <s.MintBlock>
         <s.Card>
           <s.CardImg src={one}></s.CardImg>
-          <s.CardText>Mint 1 Chibi Dinos</s.CardText>
+          <s.CardText>Mint 1 Bear</s.CardText>
           {countdown === 0 ? (
             <s.CardButton
+              disabled={claimingNft ? 1 : 0}
               onClick={(e) => {
-                setMintAmount(10);
+                setMintAmount(1);
                 claimNFTs();
                 getData();
               }}
             >
-              MINT NOW
+              {claimingNft ? "CLAMING" : "MINT NOW"}
             </s.CardButton>
           ) : (
             <s.CardButton>MINT SOON</s.CardButton>
@@ -267,16 +280,17 @@ function App() {
         </s.Card>
         <s.Card>
           <s.CardImg src={five}></s.CardImg>
-          <s.CardText>Mint 5 Chibi Dinos</s.CardText>
+          <s.CardText>Mint 2 Bears</s.CardText>
           {countdown === 0 ? (
             <s.CardButton
+              disabled={claimingNft ? 1 : 0}
               onClick={(e) => {
-                setMintAmount(10);
+                setMintAmount(5);
                 claimNFTs();
                 getData();
               }}
             >
-              MINT NOW
+              {claimingNft ? "CLAMING" : "MINT NOW"}
             </s.CardButton>
           ) : (
             <s.CardButton>MINT SOON</s.CardButton>
@@ -284,16 +298,17 @@ function App() {
         </s.Card>
         <s.Card>
           <s.CardImg src={ten}></s.CardImg>
-          <s.CardText>Mint 10 Chibi Dinos</s.CardText>
+          <s.CardText>Mint 3 Bears</s.CardText>
           {countdown === 0 ? (
             <s.CardButton
+              disabled={claimingNft ? 1 : 0}
               onClick={(e) => {
                 setMintAmount(10);
                 claimNFTs();
                 getData();
               }}
             >
-              MINT NOW
+              {claimingNft ? "CLAMING" : "MINT NOW"}
             </s.CardButton>
           ) : (
             <s.CardButton>MINT SOON</s.CardButton>

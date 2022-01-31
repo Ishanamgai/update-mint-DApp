@@ -6,7 +6,7 @@
     "SYMBOL": "ETH",
     "ID": 1
   },
-  "NFT_NAME": "Chibi Dino Trick or Treat",
+  "NFT_NAME": "Global Bears Club",
   "SYMBOL": "Set",
   "MAX_SUPPLY": 400,
   "WEI_COST": 0,
@@ -14,5 +14,5 @@
   "GAS_LIMIT": 380000,
   "MARKETPLACE": "Opeansea",
   "MARKETPLACE_LINK": "https://testnets.opensea.io/collection/Chibi-Dino-Trick-or-Treat",
-  "SHOW_BACKGROUND": true
+  "SHOW_BACKGROUND": false
 }
