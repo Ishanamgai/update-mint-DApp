@@ -56,7 +56,7 @@ export const connect = () => {
       let web3 = new Web3(ethereum);
       try {
         const accounts = await ethereum.request({
-          method: "eth_requestAccounts",
+          method: "eth_requestAccounts"
         });
         console.log(accounts, "accounts");
         const networkId = await ethereum.request({
