@@ -6,6 +6,11 @@
     "SYMBOL": "ETH",
     "ID": 1
   },
+  "TEST_NETWORK": {
+    "NAME": "Etherium ",
+    "SYMBOL": "ETH",
+    "ID": 4
+  },
   "NFT_NAME": "Global Bears Club",
   "SYMBOL": "Set",
   "MAX_SUPPLY": 400,

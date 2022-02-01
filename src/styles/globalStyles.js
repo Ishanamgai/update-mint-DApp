@@ -19,7 +19,7 @@ export const Header = styled.div`
   margin-top: -40px;
   @media (max-width: 767px) {
     flex-direction: column;
-    align-items: center
+    align-items: center;
   }
 `;
 export const LogoContain = styled.div`
@@ -41,7 +41,6 @@ export const MenuItem = styled.a`
   padding: 20px 20px;
   text-decoration: none;
   color: white;
-  
 `;
 export const MenuActiveItem = styled.button`
   padding: 20px 20px;
@@ -72,7 +71,7 @@ export const TimerValue = styled.p`
 export const Timertitle = styled.p`
   color: white;
   text-align: center;
-`
+`;
 export const CommentText = styled.p`
   text-align: center;
   font-size: 15px;
@@ -128,4 +127,51 @@ export const Container = styled.div`
   background-image: ${({ image }) => (image ? `url(${image})` : "none")};
   background-size: cover;
   background-position: center;
+`;
+export const Wallet = styled.div`
+  display: none;
+  position: fixed;
+  z-index: 1;
+  padding-top: 100px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.4);
+`;
+export const WalletContent = styled.div`
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  border-radius: 10px;
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+export const WalletButton = styled.button`
+  padding: 10px 20px;
+  width: 360px;
+  margin-top: 15px;
+  background: white;
+  border-radius: 20px;
+  border: 1px solid #f2f2f2;
+  font-weight: bold;
+  font-size: 16px;
+  display: flex;
+  color: grey;
+  justify-content: space-between;
+`;
+export const WalletIcon = styled.img`
+  width: 20px;
+`;
+export const Close = styled.span`
+  color: #aaaaaa;
+  align-self: end;
+  margin-right: 20px;
+  font-size: 28px;
+  font-weight: bold;
 `;

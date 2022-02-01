@@ -10,6 +10,9 @@ import one from "./assets/one.png";
 import five from "./assets/five.png";
 import ten from "./assets/ten.png";
 import bg from "./assets/bg.png";
+import clover from "./assets/clover.png"
+import metamask from "./assets/metamask.svg"
+import coinbase from "./assets/coinbase.svg"
 
 require("dotenv").config();
 
@@ -18,6 +21,7 @@ const truncate = (input, len) =>
 
 function App() {
   const dispatch = useDispatch();
+  const walletSelect = useRef(null);
   const blockchain = useSelector((state) => state.blockchain);
   const data = useSelector((state) => state.data);
   const [claimingNft, setClaimingNft] = useState(false);
@@ -109,6 +113,13 @@ function App() {
     }
   };
 
+  const selectWallet = (e) => {
+    console.log("select");
+    walletSelect.current.style.display = "block";
+  };
+  const walletClose = (e) => {
+    walletSelect.current.style.display = "none";
+  }
   const getConfig = async () => {
     const configResponse = await fetch("/config/config.json", {
       headers: {
@@ -119,7 +130,7 @@ function App() {
     const config = await configResponse.json();
     SET_CONFIG(config);
   };
-
+  
   useEffect(() => {
     getConfig();
     let currentDate = new Date();
@@ -201,28 +212,57 @@ function App() {
           {blockchain.account === "" || blockchain.smartContract === null ? (
             <s.MenuActiveItem
               onClick={(e) => {
-                e.preventDefault();
-                dispatch(connect());
-                getData();
+                selectWallet(e);
+                // e.preventDefault();
+                // dispatch(connect());
+                // getData();
               }}
             >
               CONNECT
             </s.MenuActiveItem>
           ) : (
-            // <s.MenuActiveItem
-            //   disabled={claimingNft ? 1 : 0}
-            //   onClick={(e) => {
-            //     e.preventDefault();
-            //     claimNFTs();
-            //     getData();
-            //   }}
-            // >
-            //   MINT NOW
-            // </s.MenuActiveItem>
             <></>
           )}
         </s.Menu>
       </s.Header>
+      <s.Wallet ref={walletSelect}>
+        <s.WalletContent>
+          <s.Close onClick={walletClose}>&times;</s.Close>
+          <s.WalletButton
+            onClick={(e) => {
+              e.preventDefault();
+              dispatch(connect());
+              getData();
+              walletClose();
+            }}
+          >
+            MetaMask
+            <s.WalletIcon src={metamask}></s.WalletIcon>
+          </s.WalletButton>
+          <s.WalletButton
+            onClick={(e) => {
+              e.preventDefault();
+              dispatch(connect());
+              getData();
+              walletClose();
+            }}
+          >
+            Coinbase Wallet
+            <s.WalletIcon src={coinbase}></s.WalletIcon>
+          </s.WalletButton>
+          <s.WalletButton
+            onClick={(e) => {
+              e.preventDefault();
+              dispatch(connect());
+              getData();
+              walletClose();
+            }}
+          >
+            Clover
+            <s.WalletIcon src={clover}></s.WalletIcon>
+          </s.WalletButton>
+        </s.WalletContent>
+      </s.Wallet>
       <s.Timerblock>
         <s.TimerText>
           <s.ItemContain>
