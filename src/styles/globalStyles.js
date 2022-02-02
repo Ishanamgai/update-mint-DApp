@@ -34,13 +34,16 @@ export const Menu = styled.div`
   margin-top: -20px;
   align-items: center;
   @media (max-width: 767px) {
-    flex-direction: column;
+    // flex-direction: column;
   }
 `;
 export const MenuItem = styled.a`
   padding: 20px 20px;
   text-decoration: none;
   color: white;
+  @media (max-width: 530px) {
+    display: none;
+  }
 `;
 export const MenuActiveItem = styled.button`
   padding: 20px 20px;
@@ -54,14 +57,17 @@ export const Timerblock = styled.div`
   justify-content: center;
 `;
 export const TimerText = styled.div`
-  width: 400px;
+  width: 340px;
   margin-top: -80px;
   display: flex;
   background: transparent;
   justify-content: center;
+  @media (max-width: 767px) {
+    margin-top: 0;
+  }
 `;
 export const ItemContain = styled.div`
-  margin: 10px 20px;
+  margin: 10px 15px;
 `;
 export const TimerValue = styled.p`
   font-size: 50px;
@@ -100,7 +106,7 @@ export const Card = styled.div`
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 `;
 export const CardImg = styled.img`
-  width: 330px;
+  width: 320px;
 `;
 export const CardText = styled.p`
   font-size: 20px;
@@ -108,7 +114,7 @@ export const CardText = styled.p`
 `;
 export const CardButton = styled.button`
   border-radius: 30px;
-  padding: 10px 110px;
+  padding: 10px 100px;
   margin-top: 30px;
   background: red;
   border: none;

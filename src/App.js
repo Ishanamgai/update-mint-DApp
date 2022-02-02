@@ -26,6 +26,9 @@ function App() {
   const blockchain = useSelector((state) => state.blockchain);
   const data = useSelector((state) => state.data);
   const [claimingNft, setClaimingNft] = useState(false);
+  const [claimingOne, setClaimingOne] = useState(false);
+  const [claimingFive, setClaimingFive] = useState(false);
+  const [claimingTen, setClaimingTen] = useState(false);
   const [countdown, setCountdown] = useState(0);
   const [leftTime, setLeftTime] = useState({
     year: 0,
@@ -58,7 +61,7 @@ function App() {
     SHOW_BACKGROUND: true,
   });
 
-  const claimNFTs = (amount) => {
+  const claimNFTs = (e, amount) => {
     console.log(amount);
     if (blockchain.account !== "" && blockchain.smartContract !== null) {
       let cost = CONFIG.WEI_COST;
@@ -81,6 +84,7 @@ function App() {
           console.log(err);
           setFeedback("Sorry, something went wrong please try again later.");
           setClaimingNft(false);
+          e.target.innerHTML = "MING NOW";
         })
         .then((receipt) => {
           console.log(receipt);
@@ -88,6 +92,15 @@ function App() {
             `WOW, the ${CONFIG.NFT_NAME} is yours! go visit Opensea.io to view it.`
           );
           setClaimingNft(false);
+          if (amount === 1) {
+            setClaimingOne(true);
+          }
+          else if (amount === 5) {
+            setClaimingFive(true);
+          }
+          else {
+            setClaimingTen(true);
+          }
           dispatch(fetchData(blockchain.account));
         });
     }
@@ -116,9 +129,12 @@ function App() {
     const config = await configResponse.json();
     SET_CONFIG(config);
   };
-  const mintNow = (amount) => {
+  const mintNow = (e, amount) => {
+    if (blockchain.account !== "" && blockchain.smartContract !== null) {
+      e.target.innerHTML = "CLAIMING";
+    }
     setMintAmount(amount);
-    claimNFTs(amount);
+    claimNFTs(e, amount);
     getData();
   }
   useEffect(() => {
@@ -293,9 +309,9 @@ function App() {
           {countdown === 0 ? (
             <s.CardButton
               disabled={claimingNft ? 1 : 0}
-              onClick={ (e) => mintNow(1)}
+              onClick={ (e) => mintNow(e, 1)}
             >
-              {claimingNft ? "CLAIMED" : "MINT NOW"}
+              {claimingOne ? "CLAIMED" : "MINT NOW"}
             </s.CardButton>
           ) : (
             <s.CardButton>MINT SOON</s.CardButton>
@@ -307,9 +323,9 @@ function App() {
           {countdown === 0 ? (
             <s.CardButton
               disabled={claimingNft ? 1 : 0}
-              onClick={ (e) => mintNow(5)}
+              onClick={ (e) => mintNow(e, 5)}
             >
-              {claimingNft ? "CLAIMED" : "MINT NOW"}
+              {claimingFive ? "CLAIMED" : "MINT NOW"}
             </s.CardButton>
           ) : (
             <s.CardButton>MINT SOON</s.CardButton>
@@ -321,9 +337,9 @@ function App() {
           {countdown === 0 ? (
             <s.CardButton
               disabled={claimingNft ? 1 : 0}
-              onClick={ (e) => mintNow(10)}
+              onClick={ (e) => mintNow(e, 10)}
             >
-              {claimingNft ? "CLAIMED" : "MINT NOW"}
+              {claimingTen ? "CLAIMED" : "MINT NOW"}
             </s.CardButton>
           ) : (
             <s.CardButton>MINT SOON</s.CardButton>
