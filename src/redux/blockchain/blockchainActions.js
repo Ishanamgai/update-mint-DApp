@@ -55,12 +55,9 @@ export const connect = () => {
       Web3EthContract.setProvider(ethereum);
       let web3 = new Web3(ethereum);
       try {
-        // const accounts = await ethereum.request({
-        //   method: "eth_requestAccounts"
-        // });
-        // await window.ethereum.enable()
-        const accounts = await web3.eth.getAccounts()
-        
+        const accounts = await ethereum.request({
+          method: "eth_requestAccounts",
+        });
         console.log(accounts, "accounts");
         const networkId = await ethereum.request({
           method: "net_version",
@@ -96,7 +93,6 @@ export const connect = () => {
     }
   };
 };
-
 export const updateAccount = (account) => {
   return async (dispatch) => {
     dispatch(updateAccountRequest({ account: account }));
