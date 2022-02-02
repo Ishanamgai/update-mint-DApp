@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { connect } from "./redux/blockchain/blockchainActions";
+import { connectMetamask, connectCoinbase, connectClover } from "./redux/blockchain/blockchainActions";
 import { coinbaseConnect } from "./redux/blockchain/blockchainActions";
 import { fetchData } from "./redux/data/dataActions";
 import * as s from "./styles/globalStyles";
@@ -58,18 +58,19 @@ function App() {
     SHOW_BACKGROUND: true,
   });
 
-  const claimNFTs = () => {
+  const claimNFTs = (amount) => {
+    console.log(amount);
     if (blockchain.account !== "" && blockchain.smartContract !== null) {
       let cost = CONFIG.WEI_COST;
       let gasLimit = CONFIG.GAS_LIMIT;
-      let totalCostWei = String(cost * mintAmount);
-      let totalGasLimit = String(gasLimit * mintAmount);
+      let totalCostWei = String(cost * amount);
+      let totalGasLimit = String(gasLimit * amount);
       console.log("Cost: ", totalCostWei);
       console.log("Gas limit: ", totalGasLimit);
       setFeedback(`MAXIMUM 5 Mints for your ${CONFIG.NFT_NAME}...`);
       setClaimingNft(true);
       blockchain.smartContract.methods
-        .mint(mintAmount)
+        .mint(amount)
         .send({
           gasLimit: String(totalGasLimit),
           to: CONFIG.CONTRACT_ADDRESS,
@@ -90,22 +91,6 @@ function App() {
           dispatch(fetchData(blockchain.account));
         });
     }
-  };
-
-  const decrementMintAmount = () => {
-    let newMintAmount = mintAmount - 1;
-    if (newMintAmount < 1) {
-      newMintAmount = 1;
-    }
-    setMintAmount(newMintAmount);
-  };
-
-  const incrementMintAmount = () => {
-    let newMintAmount = mintAmount + 1;
-    if (newMintAmount > 10) {
-      newMintAmount = 10;
-    }
-    setMintAmount(newMintAmount);
   };
 
   const getData = () => {
@@ -131,7 +116,11 @@ function App() {
     const config = await configResponse.json();
     SET_CONFIG(config);
   };
-  
+  const mintNow = (amount) => {
+    setMintAmount(amount);
+    claimNFTs(amount);
+    getData();
+  }
   useEffect(() => {
     getConfig();
     let currentDate = new Date();
@@ -214,9 +203,6 @@ function App() {
             <s.MenuActiveItem
               onClick={(e) => {
                 selectWallet(e);
-                // e.preventDefault();
-                // dispatch(connect());
-                // getData();
               }}
             >
               CONNECT
@@ -232,7 +218,7 @@ function App() {
           <s.WalletButton
             onClick={(e) => {
               e.preventDefault();
-              dispatch(connect());
+              dispatch(connectMetamask());
               getData();
               walletClose();
             }}
@@ -243,7 +229,7 @@ function App() {
           <s.WalletButton
             onClick={(e) => {
               e.preventDefault();
-              dispatch(connect());
+              dispatch(connectCoinbase());
               getData();
               walletClose();
             }}
@@ -254,7 +240,7 @@ function App() {
           <s.WalletButton
             onClick={(e) => {
               e.preventDefault();
-              dispatch(connect());
+              dispatch(connectClover());
               getData();
               walletClose();
             }}
@@ -307,13 +293,9 @@ function App() {
           {countdown === 0 ? (
             <s.CardButton
               disabled={claimingNft ? 1 : 0}
-              onClick={(e) => {
-                setMintAmount(1);
-                claimNFTs();
-                getData();
-              }}
+              onClick={ (e) => mintNow(1)}
             >
-              {claimingNft ? "CLAMING" : "MINT NOW"}
+              {claimingNft ? "CLAIMED" : "MINT NOW"}
             </s.CardButton>
           ) : (
             <s.CardButton>MINT SOON</s.CardButton>
@@ -325,13 +307,9 @@ function App() {
           {countdown === 0 ? (
             <s.CardButton
               disabled={claimingNft ? 1 : 0}
-              onClick={(e) => {
-                setMintAmount(5);
-                claimNFTs();
-                getData();
-              }}
+              onClick={ (e) => mintNow(5)}
             >
-              {claimingNft ? "CLAMING" : "MINT NOW"}
+              {claimingNft ? "CLAIMED" : "MINT NOW"}
             </s.CardButton>
           ) : (
             <s.CardButton>MINT SOON</s.CardButton>
@@ -343,13 +321,9 @@ function App() {
           {countdown === 0 ? (
             <s.CardButton
               disabled={claimingNft ? 1 : 0}
-              onClick={(e) => {
-                setMintAmount(10);
-                claimNFTs();
-                getData();
-              }}
+              onClick={ (e) => mintNow(10)}
             >
-              {claimingNft ? "CLAMING" : "MINT NOW"}
+              {claimingNft ? "CLAIMED" : "MINT NOW"}
             </s.CardButton>
           ) : (
             <s.CardButton>MINT SOON</s.CardButton>

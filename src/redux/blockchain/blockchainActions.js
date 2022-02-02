@@ -31,7 +31,7 @@ const updateAccountRequest = (payload) => {
   };
 };
 
-export const connect = () => {
+export const connectMetamask = () => {
   return async (dispatch) => {
     dispatch(connectRequest());
     const abiResponse = await fetch("/config/abi.json", {
@@ -90,6 +90,122 @@ export const connect = () => {
       }
     } else {
       dispatch(connectFailed("Install Metamask."));
+    }
+  };
+};
+export const connectCoinbase = () => {
+  return async (dispatch) => {
+    dispatch(connectRequest());
+    const abiResponse = await fetch("/config/abi.json", {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    });
+    const abi = await abiResponse.json();
+    const configResponse = await fetch("/config/config.json", {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    });
+    const CONFIG = await configResponse.json();
+    const { ethereum } = window;
+    console.log(ethereum, "ethereum");
+    const metamaskIsInstalled = ethereum && ethereum.isMetaMask;
+    Web3EthContract.setProvider(ethereum);
+    let web3 = new Web3(ethereum);
+    try {
+      const accounts = await ethereum.request({
+        method: "eth_requestAccounts",
+      });
+      console.log(accounts, "accounts");
+      const networkId = await ethereum.request({
+        method: "net_version",
+      });
+      if (networkId == CONFIG.NETWORK.ID) {
+        const SmartContractObj = new Web3EthContract(
+          abi,
+          CONFIG.CONTRACT_ADDRESS
+        );
+        dispatch(
+          connectSuccess({
+            account: accounts[0],
+            smartContract: SmartContractObj,
+            web3: web3,
+          })
+        );
+        // Add listeners start
+        ethereum.on("accountsChanged", (accounts) => {
+          dispatch(updateAccount(accounts[0]));
+        });
+        ethereum.on("chainChanged", () => {
+          window.location.reload();
+        });
+        // Add listeners end
+      } else {
+        dispatch(connectFailed(`Change network to ${CONFIG.NETWORK.NAME}.`));
+      }
+    } catch (err) {
+      dispatch(connectFailed("Something went wrong."));
+    }
+  };
+};
+export const connectClover = () => {
+  return async (dispatch) => {
+    dispatch(connectRequest());
+    const abiResponse = await fetch("/config/abi.json", {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    });
+    const abi = await abiResponse.json();
+    const configResponse = await fetch("/config/config.json", {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    });
+    const CONFIG = await configResponse.json();
+    const { ethereum } = window;
+    console.log(ethereum, "ethereum");
+    const metamaskIsInstalled = ethereum && ethereum.isMetaMask;
+    Web3EthContract.setProvider(ethereum);
+    let web3 = new Web3(ethereum);
+    try {
+      const accounts = await window.clover.request({
+        method: "eth_requestAccounts",
+      });
+      console.log(accounts, "accounts");
+      const networkId = await ethereum.request({
+        method: "net_version",
+      });
+      if (networkId == CONFIG.NETWORK.ID) {
+        const SmartContractObj = new Web3EthContract(
+          abi,
+          CONFIG.CONTRACT_ADDRESS
+        );
+        dispatch(
+          connectSuccess({
+            account: accounts[0],
+            smartContract: SmartContractObj,
+            web3: web3,
+          })
+        );
+        // Add listeners start
+        ethereum.on("accountsChanged", (accounts) => {
+          dispatch(updateAccount(accounts[0]));
+        });
+        ethereum.on("chainChanged", () => {
+          window.location.reload();
+        });
+        // Add listeners end
+      } else {
+        dispatch(connectFailed(`Change network to ${CONFIG.NETWORK.NAME}.`));
+      }
+    } catch (err) {
+      dispatch(connectFailed("Something went wrong."));
     }
   };
 };
