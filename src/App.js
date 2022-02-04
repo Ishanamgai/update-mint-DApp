@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { connectMetamask, connectCoinbase, connectClover } from "./redux/blockchain/blockchainActions";
-import { coinbaseConnect } from "./redux/blockchain/blockchainActions";
 import { fetchData } from "./redux/data/dataActions";
 import * as s from "./styles/globalStyles";
 import styled from "styled-components";
@@ -84,7 +83,7 @@ function App() {
           console.log(err);
           setFeedback("Sorry, something went wrong please try again later.");
           setClaimingNft(false);
-          e.target.innerHTML = "MING NOW";
+          e.target.innerHTML = "MINT NOW";
         })
         .then((receipt) => {
           console.log(receipt);
@@ -98,7 +97,7 @@ function App() {
           else if (amount === 5) {
             setClaimingFive(true);
           }
-          else {
+          else if(amount === 10) {
             setClaimingTen(true);
           }
           dispatch(fetchData(blockchain.account));
